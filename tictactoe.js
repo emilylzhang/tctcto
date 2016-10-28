@@ -1,55 +1,29 @@
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-
-// Game introduction
-function intro() {
-    console.log("Let's play tictactoe!")
-    console.log();
-    console.log("         |         |         ");
-    console.log("    1    |    2    |    3    ");
-    console.log("         |         |         ");
-    console.log("---------|---------|---------");
-    console.log("         |         |         ");
-    console.log("    4    |    5    |    6    ");
-    console.log("         |         |         ");
-    console.log("---------|---------|---------");
-    console.log("         |         |         ");
-    console.log("    7    |    8    |    9    ");
-    console.log("         |         |         ");
-    console.log("When it is your turn, choose a number to mark the grid!");
-};
+var readlineSync = require('readline-sync');
 
 game = {};
 
-function X() {
-    var row1, row2, row3;
-    row1 = "         ";
-    row2 = "    \\/   ";
-    row3 = "    /\\   ";
-    return [row1, row2, row3];
+const x = {
+    r1 : "         ",
+    r2 : "    \\/   ",
+    r3 : "    /\\   "
 };
 
-function O() {
-    var row1, row2, row3;
-    row1 = "    _    ";
-    row2 = "   | |   ";
-    row3 = "   |_|   ";
-    return [row1, row2, row3];
-}
+const o = {
+    r1 : "    _    ",
+    r2 : "   | |   ",
+    r3 : "   |_|   "
+};
 
-function blank() {
-    var row1, row2, row3;
-    row1 = "         ";
-    row2 = "         ";
-    row3 = "         ";
-    return [row1, row2, row3];
-}
+function blank(gridNum) {
+    var rows = {
+        r1 : "         ",
+        r2 : "    " + gridNum + "    ",
+        r3 : "         "
+    };
+    return rows;
+};
 
-function printgrid() {
+function printGrid() {
     console.log();
 
     num = Object.keys(game).length;
@@ -62,19 +36,19 @@ function printgrid() {
             gridNum++;
             var element;
             switch(game[gridNum]) {
-                case 'X':
-                    element = X();
+                case "X":
+                    element = x;
                     break;
-                case 'O':
-                    element = O();
+                case "O":
+                    element = o;
                     break;
                 default:
-                    element = blank();
+                    element = blank(gridNum);
                     break;
             };
-            row1+=element[0];
-            row2+=element[1];
-            row3+=element[2];
+            row1+=element["r1"];
+            row2+=element["r2"];
+            row3+=element["r3"];
             if (j < 2) {
                 row1+="|";
                 row2+="|";
@@ -91,27 +65,53 @@ function printgrid() {
     console.log();
 };
 
-function play() {
-    for (var i = 0; i < 9; i++) {
-        var mark;
-        if (i % 2 == 0) {
-            mark = 'X';
-            console.log("Player 1, please select a grid.");
-        } else {
-            mark = 'O';
-            console.log("Player 2, please select a grid.");
-        };
+// var prompt = require("prompt");
+// prompt.message = "";
+// prompt.start();
 
-        // var response = -1;
-        // while (response < 0 || response > 9) {
-        //     rl.question('Player 1, please select a grid. ', (response) => {});
-        // }
-        // rl.close();
-        // var response = readline();
-        // while (response < 0 || response > 9) {
-        //     console.log("This number does not correspond to a grid. Try again.");
-        //     response = readline();
-        // };
+// var property = {
+//     name: "gridPos",
+//     message: "Please select a grid!",
+//     type: "integer",
+//     minumum: 1,
+//     maximum: 9,
+//     warning: "Please choose a number from 1 - 9",
+//     required: true,
+//     conform: function (pos) {
+//         if (game[pos] == undefined) return true;
+//         return false;
+//     }
+// };
+
+function play() {
+    console.log("Let's play tictactoe!");
+    console.log("\nINSTRUCTIONS: \nWhen it is your turn, select " +
+                "a spot by choosing a number from 1 to 9!");
+    for (var i = 0; i < 9; i++) {
+        printGrid();
+        var mark, gridPos;
+        if (i % 2 == 0) {
+            mark = "X";
+            console.log("\nPlayer 1:");
+        } else {
+            mark = "O";
+            console.log("\nPlayer 2:");
+        };
+        gridPos = -1;
+        while (true) {
+            gridPos = readlineSync.question("-> ")
+            if (gridPos < 1 || gridPos > 9) {
+                console.log("Your input is an invalid number.");
+            } else if (game[gridPos] != undefined) {
+                console.log("This spot has already been taken. Choose another!");
+            } else {
+                break;
+            };
+        }
+        game[gridPos] = mark;
+        // prompt.get(property, function (err, result) {
+        //     console.log("Command-line input received:" + result.gridPos);
+        // });
 
 
     };
