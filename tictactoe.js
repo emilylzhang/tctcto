@@ -68,7 +68,8 @@ function printGrid() {
 };
 
 function play() {
-    var mark, gridPos, winner, quit;
+    var mark, gridPos, winner, quit, player;
+    var first = false;
     console.log("Let's play tictactoe!");
     console.log("\nINSTRUCTIONS: \nWhen it is your turn, select " +
                 "a spot by choosing a number from 1 to 9!");
@@ -78,8 +79,13 @@ function play() {
         winner = undefined;
         gameloop:
         for (var i = 0; i < 9; i++) {
+            if (first) {
+                player = i + 1;
+            } else {
+                player = i;
+            };
             printGrid();
-            if (i % 2 == 0) {
+            if (player % 2 == 0) {
                 mark = "X";
                 console.log("\nPlayer 1:");
             } else {
@@ -88,12 +94,12 @@ function play() {
             };
             gridPos = -1;
             while (true) {
-                gridPos = readlineSync.question("-> ")
-                if (gridPos >= 1 || gridPos <= 9) {
-                    break;
-                } else if (game[gridPos] != undefined) {
+                gridPos = readlineSync.question("-> ");
+                if (game[gridPos] != undefined) {
                     console.log("This spot has already been taken. " + 
                                 "Choose another!");
+                } else if (gridPos >= 1 || gridPos <= 9) {
+                    break;
                 } else if (gridPos == "I surrender") {
                     console.log("Surrender accepted.");
                     if (mark == "X") {
@@ -122,7 +128,7 @@ function play() {
         if (winner == undefined) {
             console.log("This game ended in a draw.");
         }
-        console.log("\n\n------------------\n" + 
+        console.log("\n------------------\n" + 
                     "CURRENT SCOREBOARD:" +
                     "\nPLAYER 1: " + player1 + 
                     "\nPLAYER 2: " + player2);
@@ -132,10 +138,11 @@ function play() {
             break playloop;
         };
         console.log("\n\nNEW GAME:");
+        first = !first;
         game = {};
     };
-    console.log("Thank you for playing!" +
-                "\nOVERALL WINNER:\n");
+    console.log("\n\nThank you for playing!" +
+                "\nOVERALL WINNER:");
     if (player1 > player2) {
         console.log("PLAYER 1!");
     } else if (player2 > player1) {
@@ -143,6 +150,7 @@ function play() {
     } else {
         console.log("EVERYONE IS A WINNER! :) (Both players tied!)");
     }
+    console.log();
 };
 
 
