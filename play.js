@@ -4,7 +4,7 @@ var sb = require('./scoreboard.js');
 var tictactoe = require('./tictactoe');
 
 function play() {
-    var mark, gridPos, winner, quit, player;
+    var mark, gridPos, winner, quit, player, game;
     var scoreboard = sb.createScoreBoard();
     var first = false;
     console.log('Let\'s play tictactoe!\nINSTRUCTIONS: \nWhen it is ' +
