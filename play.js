@@ -4,7 +4,7 @@ var sb = require('./scoreboard.js');
 var tictactoe = require('./tictactoe.js');
 
 // Play.
-function play() {
+var play = function() {
     var quit;
     var scoreboard = sb.createScoreBoard();
     var player1First = true;
@@ -25,7 +25,7 @@ function play() {
 }
 
 // Play a round of the game.
-function playRound(player1First, scoreboard) {
+var playRound = function(player1First, scoreboard) {
     console.log('\n\nNEW GAME:');
     var game = tictactoe.newGame();
     var player, gridPos, mark, winner;
@@ -89,4 +89,6 @@ function end(scoreboard) {
     console.log();
 }
 
-play();
+module.exports.play = play;
+module.exports.playRound = playRound;
+
