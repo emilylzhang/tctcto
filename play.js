@@ -28,8 +28,7 @@ function play() {
 function playRound(player1First, scoreboard) {
     console.log('\n\nNEW GAME:');
     var game = tictactoe.newGame();
-    var player, gridPos, mark;
-    var winner = undefined;
+    var player, gridPos, mark, winner;
     for (var i = 0; i < 9; i++) {
         if (player1First) {
             player = i;
