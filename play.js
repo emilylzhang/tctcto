@@ -22,7 +22,7 @@ var play = function() {
         player1First = !player1First;
     }
     end(scoreboard);
-}
+};
 
 // Play a round of the game.
 var playRound = function(player1First, scoreboard) {
@@ -60,7 +60,7 @@ var playRound = function(player1First, scoreboard) {
     if (winner === undefined) {
         console.log('This game ended in a draw.');
     }
-}
+};
 
 // Get move from command line input.
 function makeMove(game, mark) {
