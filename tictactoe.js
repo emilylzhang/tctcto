@@ -104,6 +104,7 @@ var done = function(game) {
     return undefined;
 };
 
+// Creates a new game.
 var newGame = function() {
     return {};
 };

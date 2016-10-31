@@ -3,10 +3,11 @@ var readlineSync = require('readline-sync');
 var sb = require('./scoreboard.js');
 var tictactoe = require('./tictactoe');
 
+// Play a game.
 function play() {
     var mark, gridPos, winner, quit, player, game;
     var scoreboard = sb.createScoreBoard();
-    var first = false;
+    var player1First = true;
     console.log('Let\'s play tictactoe!\nINSTRUCTIONS: \nWhen it is ' +
                 'your turn, select a spot by choosing a number from 1 to 9!');
   
@@ -16,10 +17,10 @@ function play() {
         winner = undefined;
         gameloop:
         for (var i = 0; i < 9; i++) {
-            if (first) {
-                player = i + 1;
-            } else {
+            if (player1First) {
                 player = i;
+            } else {
+                player = i + 1;
             }
             console.log(tictactoe.gameToString(game));
             if (player % 2 === 0) {
@@ -29,15 +30,7 @@ function play() {
                 mark = 'O';
                 console.log('\nPlayer 2:');
             }
-            gridPos = -1;
-            while (true) {
-                gridPos = readlineSync.question('-> ');
-                var result = tictactoe.move(game, gridPos, mark);
-                if (result[0]) {
-                    break;
-                }
-                console.log(result[1]);
-            }
+            makeMove(game, mark);
             game[gridPos] = mark;
             winner = tictactoe.done(game);
             if (winner == 'X') {
@@ -61,15 +54,32 @@ function play() {
             break playloop;
         }
         console.log('\n\nNEW GAME:');
-        first = !first;
+        player1First = !player1First;
     }
-    console.log('\n\nThank you for playing!' +
-                '\nOVERALL WINNER:');
+    end(scoreboard);
+}
+
+// Get move from command line input.
+function makeMove(game, mark) {
+    var gridPos, result;
+    while (true) {
+        gridPos = readlineSync.question('-> ');
+        result = tictactoe.move(game, gridPos, mark);
+        if (result[0]) {
+            break;
+        }
+        console.log(result[1]);
+    }
+}
+
+// Print out overall winner at the end of the game.
+function end(scoreboard) {
+    console.log('\n\nThank you for playing!');
     var overallWinner = sb.overallWinner(scoreboard);
     if (overallWinner === 1) {
-        console.log('PLAYER 1!');
+        console.log('OVERALL WINNER: PLAYER 1!');
     } else if (overallWinner === 2) {
-        console.log('PLAYER 2!');
+        console.log('OVERALL WINNER: PLAYER 2!');
     } else {
         console.log('EVERYONE IS A WINNER! :) (Both players tied!)');
     }
