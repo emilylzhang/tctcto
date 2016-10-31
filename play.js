@@ -1,7 +1,7 @@
 /* jshint node: true */
 var readlineSync = require('readline-sync');
 var sb = require('./scoreboard.js');
-var tictactoe = require('./tictactoe');
+var tictactoe = require('./tictactoe.js');
 
 // Play a game.
 function play() {
