@@ -11,11 +11,9 @@ function play() {
     console.log('Let\'s play tictactoe!\nINSTRUCTIONS: \nWhen it is ' +
                 'your turn, select a spot by choosing a number from 1 to 9!');
   
-    playloop:
     while (true) {
         game = tictactoe.newGame();
         winner = undefined;
-        gameloop:
         for (var i = 0; i < 9; i++) {
             if (player1First) {
                 player = i;
@@ -51,7 +49,7 @@ function play() {
         quit = readlineSync.question('\n\nDo you wish to quit the game ' +
                                         'now? Type \'q\' to quit.\n-> ');
         if (quit == 'q' || quit == 'Q') {
-            break playloop;
+            break;
         }
         console.log('\n\nNEW GAME:');
         player1First = !player1First;
