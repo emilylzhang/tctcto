@@ -1,10 +1,4 @@
 /* jshint node: true */
-var readlineSync = require('readline-sync');
-
-// var game = {};
-var player1 = 0;
-var player2 = 0;
-
 var X = {
     r1 : '         ',
     r2 : '    \\/   ',
@@ -17,22 +11,23 @@ var O = {
     r3 : '   |_|   ',
 };
 
-function blank(gridNum) {
+var blank = function(gridNum) {
     var rows = {
         r1 : '         ',
         r2 : '    ' + gridNum + '    ',
         r3 : '         ',
     };
     return rows;
-}
+};
 
-function printGrid(game) {
-    console.log();
+// Returns a string representing the game grid.
+var gameToString = function(game) {
+    var gameString = '\n';
     var gridNum = 0;
     for (var i = 0; i < 3; i++) {
-        var row1 = '';
-        var row2 = '';
-        var row3 = '';
+        var row1 = '\n';
+        var row2 = '\n';
+        var row3 = '\n';
         for (var j = 0; j < 3; j++) {
             gridNum++;
             var element;
@@ -56,111 +51,32 @@ function printGrid(game) {
                 row3+='|';
             }
         }
-        console.log(row1);
-        console.log(row2);
-        console.log(row3);
+        gameString += row1 + row2 + row3;
         if (i < 2) {
-            console.log('---------|---------|---------');
+            gameString += '\n---------|---------|---------';
         }
     }
-    console.log();
-}
+    return gameString + '\n';
+};
 
 // Make a move, at position gridNum with mark 'X' or 'O'.
-// Returns false if unsuccessful, true if successful.
-function move(game, gridNum, mark) {
-    var isValid = (gridNum >= 1 || gridNum <= 9);
+// Returns an array containing whether the move was successful
+// or not, and an error message if the first value of the array is false.
+var move = function(game, gridNum, mark) {
+    var isValid = (gridNum >= 1 && gridNum <= 9);
     if (game[gridNum] !== undefined) {
-        console.log('This spot has already been taken. ' +
-                    'Choose another!');
-        return false;
+        return [false, 'This spot has already been taken. ' +
+                       'Choose another!'];
     } else if (isValid) {
         game[gridNum] = mark;
-        return true;
+        return [true];
     }
-
-    console.log('Your input is invalid.');
-    return false;
-}
-
-function play(game) {
-    var mark, gridPos, winner, quit, player;
-    var first = false;
-    console.log('Let\'s play tictactoe!');
-    console.log('\nINSTRUCTIONS: \nWhen it is your turn, select ' +
-                'a spot by choosing a number from 1 to 9!');
-    console.log('Alternatively, you can give up by typing \'I surrender\'.');
-  
-    playloop:
-    while (true) {
-        winner = undefined;
-        gameloop:
-        for (var i = 0; i < 9; i++) {
-            if (first) {
-                player = i + 1;
-            } else {
-                player = i;
-            }
-            printGrid(game);
-            if (player % 2 === 0) {
-                mark = 'X';
-                console.log('\nPlayer 1:');
-            } else {
-                mark = 'O';
-                console.log('\nPlayer 2:');
-            }
-            gridPos = -1;
-            while (true) {
-                gridPos = readlineSync.question('-> ');
-                if (move(game, gridPos, mark)) {
-                    break;
-                }
-            }
-            game[gridPos] = mark;
-            winner = done(game);
-            if (winner == 'X') {
-                console.log('\nPlayer 1 wins!');
-                player1++;
-                break;
-            } else if (winner == 'O') {
-                console.log('\nPlayer 2 wins!');
-                player2++;
-                break;
-            }
-        }
-        printGrid(game);
-        if (winner === undefined) {
-            console.log('This game ended in a draw.');
-        }
-        console.log('\n------------------\n' +
-                    'CURRENT SCOREBOARD:' +
-                    '\nPLAYER 1: ' + player1 + 
-                    '\nPLAYER 2: ' + player2);
-        quit = readlineSync.question('\n\nDo you wish to quit the game ' +
-                                        'now? Type \'q\' to quit.\n-> ');
-        if (quit == 'q' || quit == 'Q') {
-            break playloop;
-        }
-        console.log('\n\nNEW GAME:');
-        first = !first;
-        game = {};
-    }
-    console.log('\n\nThank you for playing!' +
-                '\nOVERALL WINNER:');
-    if (player1 > player2) {
-        console.log('PLAYER 1!');
-    } else if (player2 > player1) {
-        console.log('PLAYER 2!');
-    } else {
-        console.log('EVERYONE IS A WINNER! :) (Both players tied!)');
-    }
-    console.log();
-}
-
+    return [false, 'Your input is invalid.'];
+};
 
 // Checks for game completion, given game board.
 // Returns 'X' or 'O' if there is a win, and undefined otherwise.
-function done(game) {
+var done = function(game) {
     for (var i = 1; i <= 3; i++) {
         var mark = game[i];
         var leftDiagonalWin = (i == 1 && mark == game[i+4] && 
@@ -186,7 +102,13 @@ function done(game) {
         }
     }
     return undefined;
-}
+};
 
-play({});
+var newGame = function() {
+    return {};
+};
 
+module.exports.newGame = newGame;
+module.exports.done = done;
+module.exports.move = move;
+module.exports.gameToString = gameToString;
