@@ -28,6 +28,10 @@ var play = function() {
 var playRound = function(player1First, scoreboard) {
     console.log('\n\nNEW GAME:');
     var game = tictactoe.newGame();
+    if (scoreboard === undefined) {
+        scoreboard = sb.createScoreBoard();
+        player1First = true;
+    }
     var player, gridPos, mark, winner;
     for (var i = 0; i < 9; i++) {
         if (player1First) {

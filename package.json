@@ -1,5 +1,5 @@
 {
-  "name": "tictactoe",
+  "name": "tctcto",
   "version": "1.0.0",
   "description": "A simple game of tictactoe played from the command line.",
   "main": "play.js",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/emilylzhang/tictactoe/issues"
   },
-  "homepage": "https://github.com/emilylzhang/tictactoe#readme"
+  "homepage": "https://github.com/emilylzhang/tictactoe#readme",
+  "dependencies": {
+    "readline-sync": "^1.4.5"
+  }
 }
